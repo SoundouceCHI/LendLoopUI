@@ -1,27 +1,12 @@
 # LendLoopUI
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 17.1.1.
+LendLoopUI is the Angular-based user interface for the LendLoop application, a cutting-edge platform designed to facilitate the lending and borrowing of items among users. 
+With its intuitive and user-friendly interface, users can manage their items, browse available items nearby, and initiate lending or borrowing transactions securely and efficiently.
 
-## Development server
+## Key Features
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
-
-## Code scaffolding
-
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
-
-## Build
-
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
-
-## Running unit tests
-
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
-
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+- **User Registration and Authentication**: Allows users to sign up, log in, and manage their profile.
+- **Item Management**: Users can add, update, and delete items they wish to lend.
+- **Search and Reservation**: Makes it easy to find available items and reserve items for borrowing.
+- **QR Code for Transactions**: Uses QR codes to streamline the lending and return process.
+- **Notifications**: Sends notifications to inform users about important events related to their transactions.
