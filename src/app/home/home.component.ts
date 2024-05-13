@@ -10,11 +10,7 @@ import { CommonModule } from '@angular/common';
   imports: [ItemsResultComponent, CommonModule],
   template: `
     <section>
-      <form>
-        <input type="text" placeholder="Search for items to lend">
-        <button class="primary" type="button">Search</button>
-      </form>
-      <section class="result">
+      <section class="results">
       <app-items-result *ngFor="let item of items" [item]= "item"></app-items-result>
       </section> 
     </section>

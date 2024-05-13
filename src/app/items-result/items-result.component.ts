@@ -9,9 +9,9 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   template: `
     <section class="listing">
-    <img class="listing-photo" alt="{{item.title}}">
+    <img class="listing-photo" >
     <h2 class="listing-heading">{{item.title}}</h2>
-    <p class="listing-lenderName"></p>
+    <p class="listing-lenderName">{{item.userId}}</p>
     <a [routerLink]="['/details', item.itemId]">Details</a>
     </section> `,
   styleUrl: './items-result.component.css'

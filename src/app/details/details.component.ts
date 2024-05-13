@@ -9,8 +9,9 @@ import { Item } from '../models/item.model';
   standalone: true,
   imports: [CommonModule],
   template: `
-    <article>
+    <article class="details">
       <img class="listingPhoto" [src]="this.item?.itemImage">
+      <div class ="itemDescAvail">
       <section>
         <h2>{{this.item?.title}}</h2>
         <p>{{this.item?.description}}</p>
@@ -20,10 +21,11 @@ import { Item } from '../models/item.model';
         <p>{{this.item?.statusId}}</p>
         <button>Request</button>
       </section>
-      <section>
+      </div>
+      <div>
         <h3>{{this.item?.userId}}</h3>
         <a>Send message</a>
-      </section>
+      </div>
     </article>
     
   `,
