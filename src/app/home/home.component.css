@@ -38,3 +38,31 @@
         grid-template-columns: 1fr;
     }    
   }
+  .research {
+    background-color: #e9e9e9;
+    padding: 20px;
+    text-align: center;
+    background-image: url('/assets/background.jpg');
+  }
+
+  .research h2 {
+      margin-top: 0;
+      color: white;
+      -webkit-text-stroke: 0.2px black;
+  }
+  .research p {
+   color: white;
+   -webkit-text-stroke: 0.2px black;
+  }
+  .research form {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+  }
+
+  .research form input,
+  .research form button {
+      padding: 10px;
+      font-size: 16px;
+  }

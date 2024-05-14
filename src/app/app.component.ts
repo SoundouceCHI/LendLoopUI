@@ -9,13 +9,18 @@ import { RouterModule } from '@angular/router';
   template: `
     <main>
       <header class="lendLoop">
-        <div class = "logo">
-        <img class="lendLoopLogo" src="/assets/logoLENDLOOP.png" alt="logo" aria-hidden="true">
-        </div>
+        <div class="header-content">
+        <h1>LendLoop</h1>
         <form class="form">
           <input type="text" placeholder="Search for items to lend">
           <button class="primary" type="button">Search</button>
         </form>
+        <div class="header-buttons">
+          <button>Items available</button>
+          <button >Sign In</button>
+          <button [routerLink]="['/login']">Sign Up</button>
+        </div>
+        </div>
       </header>
       <section class="content">
         <router-outlet></router-outlet>
