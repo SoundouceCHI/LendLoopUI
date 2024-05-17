@@ -22,7 +22,7 @@ import { Item } from '../models/item.model';
         <button>Request</button>
       </section>
       </div>
-      <div>
+      <div class="user">
         <h3>{{this.item?.userId}}</h3>
         <a>Send message</a>
       </div>

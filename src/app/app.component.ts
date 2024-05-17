@@ -17,8 +17,8 @@ import { RouterModule } from '@angular/router';
         </form>
         <div class="header-buttons">
           <button>Items available</button>
-          <button >Sign In</button>
-          <button [routerLink]="['/login']">Sign Up</button>
+          <button [routerLink]="['/login']">Sign In</button>
+          <button >Sign Up</button>
         </div>
         </div>
       </header>
