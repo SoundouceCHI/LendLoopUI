@@ -15,9 +15,8 @@ export class UserService {
   constructor(private http: HttpClient) { }
 
   submitLogin(userLogin: UserLogin): Observable<boolean> {
-    const url = `${this.apiUrl}/login`; 
-    return this.http.post<{token: string}>(url, userLogin)
-    .pipe(
+    const url = `${this.apiUrl}/login`;
+    return this.http.post<{ token: string }>(url, userLogin).pipe(
       tap(res => this.setSession(res.token)),
       mapTo(true),
       catchError(error => {
@@ -26,9 +25,20 @@ export class UserService {
       })
     );
   }
-  
+
   private setSession(token: string) {
     localStorage.setItem('userToken', token);
   }
-  
+
+  logout() {
+    localStorage.removeItem('userToken');
+  }
+
+  getToken(): string | null {
+    return localStorage.getItem('userToken');
+  }
+
+  isLoggedIn(): boolean {
+    return !!this.getToken();
+  }
 }
