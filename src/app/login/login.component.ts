@@ -1,15 +1,19 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { FormControl, FormGroup, ReactiveFormsModule, Validators} from '@angular/forms';
 import { first } from 'rxjs';
 import { UserLogin } from '../models/userLogin.model';
 import { UserService } from '../services/user.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { JwtModule, JWT_OPTIONS,JwtHelperService, } from '@auth0/angular-jwt';
+import { AuthService } from '../services/auth.service';
+import { jwtConfig } from '../config/jwt.config';
 
 @Component({
   selector: 'app-login',
   standalone: true,
   imports: [ReactiveFormsModule, CommonModule],
+  providers: [JwtHelperService, AuthService], 
   template: `
 <div class="card">
   <h4 class="card-header">Login</h4>
@@ -48,7 +52,7 @@ import { Router } from '@angular/router';
 
 
   `,
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
 })
 export class LoginComponent {
   loginForm = new FormGroup({ 
@@ -58,6 +62,10 @@ export class LoginComponent {
   submitted = false; 
   loading = false;
   errorMessage: string =''; 
+  sessionInfo: { name: string, id: string } = { name: '', id: '' };
+
+  private authService = inject(AuthService);
+
   constructor(private userService: UserService, private router: Router){}
   submitLogin(){
     console.log("click"); 
@@ -68,12 +76,21 @@ export class LoginComponent {
       userLogin.password = this.loginForm.value.password ?? ''; 
       this.userService.submitLogin(userLogin).pipe(first()).subscribe(success => {
         if (success) {
-          this.router.navigate(['/']);
+          const session = this.authService.getSessionInfo(); 
+          console.log("LOGIN SESSION TOKEN "); 
+          console.log(session); 
+          if(session){
+            this.sessionInfo = session; 
+            this.router.navigate(['/']);
+          }
+          else {
+            console.log("Session is null"); 
+          }
         } else {
           this.loading = false;
           this.errorMessage = "Email or password incorrect"
         }
       });
-    }
+  }
   
 }

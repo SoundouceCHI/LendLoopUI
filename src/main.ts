@@ -3,13 +3,18 @@ import { appConfig } from './app/app.config';
 import { AppComponent } from './app/app.component';
 import { provideRouter } from '@angular/router';
 import routeConfig from './app/routes';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule,  provideHttpClient, withFetch} from '@angular/common/http';
 import { importProvidersFrom } from '@angular/core';
+import { provideJwtOptions } from './app/config/jwt.config';
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 bootstrapApplication(AppComponent, {
   providers: [
     provideRouter(routeConfig),
-    importProvidersFrom(HttpClientModule) 
+    importProvidersFrom(HttpClientModule) , 
+    provideHttpClient(withFetch()),
+    provideJwtOptions(),
+    JwtHelperService,
   ]
 }
 )

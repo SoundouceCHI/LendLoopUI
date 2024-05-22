@@ -4,7 +4,7 @@ import { Observable } from 'rxjs';
 import { UserLogin } from '../models/userLogin.model';
 import { catchError, mapTo, tap } from 'rxjs/operators';
 import { of } from 'rxjs';
-
+import { JwtHelperService } from '@auth0/angular-jwt';
 
 @Injectable({
   providedIn: 'root'
@@ -12,12 +12,14 @@ import { of } from 'rxjs';
 export class UserService {
 
   private apiUrl = "https://localhost:7041/api/UserApps"; 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
 
   submitLogin(userLogin: UserLogin): Observable<boolean> {
     const url = `${this.apiUrl}/login`;
     return this.http.post<{ token: string }>(url, userLogin).pipe(
-      tap(res => this.setSession(res.token)),
+      tap(res => {
+        this.setSession(res.token);
+      }),
       mapTo(true),
       catchError(error => {
         console.error('Login error', error);
@@ -26,8 +28,11 @@ export class UserService {
     );
   }
 
-  private setSession(token: string) {
-    localStorage.setItem('userToken', token);
+  private setSession(Token: string) {
+    console.log('Token:', Token);
+    localStorage.setItem('userToken', Token);
+    const decodedToken = this.jwtHelper.decodeToken(Token);
+    console.log('Decoded Token:', decodedToken);
   }
 
   logout() {
@@ -39,6 +44,7 @@ export class UserService {
   }
 
   isLoggedIn(): boolean {
-    return !!this.getToken();
+    const token = this.getToken();
+    return !!token && !this.jwtHelper.isTokenExpired(token);
   }
 }

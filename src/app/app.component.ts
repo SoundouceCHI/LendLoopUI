@@ -1,9 +1,10 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { Router, RouterOutlet } from '@angular/router';
 import { HomeComponent } from './home/home.component';
 import { RouterModule } from '@angular/router';
 import { UserService } from './services/user.service';
 import { CommonModule } from '@angular/common';
+import { AuthService } from './services/auth.service';
 @Component({
   selector: 'app-root',
   standalone: true,
@@ -41,7 +42,7 @@ import { CommonModule } from '@angular/common';
             </nav>
           </label>
           <div class="header-buttons">
-            <button *ngIf="isLoggedIn()" class="button">
+            <button *ngIf="isLoggedIn()" [routerLink]="['/member', userId, 'items']" class="button">
             <svg
               class="icon"
               stroke="currentColor"
@@ -68,12 +69,22 @@ import { CommonModule } from '@angular/common';
     </main>
   `,
   styleUrl: './app.component.css',
+  providers : [AuthService]
 })
 export class AppComponent {
   title = 'LendLoopUI';
+  userId =''; 
+  userName = ''; 
+
+  private authService = inject(AuthService); 
   constructor(private userService: UserService, private router: Router){ }
   ngOnInit(){
-    console.log(this.isLoggedIn()); 
+    console.log(this.isLoggedIn());
+    const sessionInfo = this.authService.getSessionInfo();  
+    if(this.isLoggedIn() && sessionInfo ){
+      this.userId = sessionInfo.id
+      this.userName = sessionInfo.name; 
+    }
   }
   isLoggedIn(): boolean{
     return this.userService.isLoggedIn(); 
@@ -82,6 +93,9 @@ export class AppComponent {
   logout(){
     this.userService.logout(); 
     this.router.navigate(['/login']); 
+  }
+  getUserId(){
+    
   }
 
 }
