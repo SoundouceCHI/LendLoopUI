@@ -17,4 +17,10 @@ export class ItemService {
     const url = `${this.apiUrl}/${id}`; 
     return this.http.get<Item>(url);
   }
+  getItemByUserId(userId: number): Observable<Item[]>{
+    const url = `${this.apiUrl}/searchItemByUserId/${userId}`; 
+    console.log("URL"); 
+    console.log(url); 
+    return this.http.get<Item[]>(url); 
+  }
 }
