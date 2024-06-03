@@ -1,20 +1,11 @@
-.container {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-direction: column;
-    text-align: center;
-  }
+
   
   .form_area {
     display: flex;
     justify-content: center;
-    align-items: center;
     flex-direction: column;
-    background-color: #d8d6d6;
     height: auto;
     width: auto;
-    border: 2px solid #151d1e;
     border-radius: 20px; 
     box-shadow: 3px 4px 0px 1px #7e6e5c;
   }

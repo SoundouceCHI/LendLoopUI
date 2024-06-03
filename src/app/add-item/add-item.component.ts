@@ -1,26 +1,43 @@
-import { Component } from '@angular/core';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { Component, OnInit } from '@angular/core';
+import { FormControl, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { CategoryService } from '../services/category.service';
+import { Router } from '@angular/router';
+import { Category } from '../models/category.model';
+import { CommonModule } from '@angular/common';
+import { SubCategory } from '../models/subCategory.model';
+import { ItemService } from '../services/item.service';
+import { Item } from '../models/item.model';
+import { AuthService } from '../services/auth.service';
+
 
 @Component({
   selector: 'app-add-item',
   standalone: true,
-  imports: [],
+  imports: [ReactiveFormsModule, CommonModule],
   template: `
     <div class="container">
     <div class="form_area">
         <p class="title">New Item</p>
-        <form action="">
+        <form [formGroup]="itemForm" (ngSubmit)="submitItem()">
             <div class="form_group">
                 <label class="sub_title" for="title">Title</label>
-                <input placeholder="Enter title of your new item" class="form_style" type="text">
+                <input formControlName="title" placeholder="Enter title of your new item" class="form_style" type="text">
             </div>
             <div class="form_group">
                 <label class="sub_title" for="description">Description</label>
-                <input placeholder="description" id="description" class="form_style" type="email">
+                <input formControlName="description" placeholder="description" id="description" class="form_style" type="email">
             </div>
             <div class="form_group">
-                <label class="sub_title" for="password">Category</label>
-                <input placeholder="Category of your item" id="password" class="form_style" type="password">
+                <label class="sub_title" for="category">Category</label>
+                <select formControlName="categoryId" id="category" class="form_style">
+                  <option *ngFor="let category of categories" [value]="category.categoryId">{{ category.categoryName }}</option>                
+                </select>
+            </div>
+            <div *ngIf="itemForm.get('categoryId')?.value !== ''" class="form_group">
+            <label class="sub_title" for="subCategory">SubCategory</label>
+            <select formControlName="subCategoryId" id="subCategory" class="form_style">
+                  <option *ngFor="let subCategory of subCategories" [value]="subCategory.subcategoryId">{{ subCategory.subcategoryName }}</option>                
+                </select>
             </div>
             <div class="form_group">
                 <label class="sub_title" for="password">Image</label>
@@ -31,23 +48,104 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
                 <div class="text">
                   <span>Click to upload image</span>
                   </div>
-                  <input type="file" id="file">
+                  <input type="file" (change)="onFileSelected($event)">
+                  
+
                 </label>
             </div>
             <div>
               <button class="btn">Rent It</button>
             </div><a class="link" href="">
         
-    </a></form></div><a class="link" href="">
-</a></div>
+    </a></form></div>
+  
+  </div>
   `,
   styleUrl: './add-item.component.css'
 })
-export class AddItemComponent {
-itemForm = new FormGroup({
-  description: new FormControl('', Validators.required),
-  title: new FormControl('', Validators.required),
-  itemImage: new FormControl('', Validators.required),
-  categoryId:new FormControl('', Validators.required)
-})
+export class AddItemComponent implements OnInit {
+  categories: Category[] = [];
+  subCategories: SubCategory[] = [];
+  id: number = 0; 
+  itemForm = new FormGroup({
+    description: new FormControl('', Validators.required),
+    title: new FormControl('', Validators.required),
+    itemImage: new FormControl(''),
+    categoryId: new FormControl('', Validators.required), 
+    subCategoryId: new FormControl('', Validators.required)
+  });
+  selectedFile: File | null = null;
+  item: Item = new Item();
+
+  constructor(private authService: AuthService, private categoryService: CategoryService, private router: Router, private itemService: ItemService) {}
+
+  ngOnInit() {
+    const sessionInfo = this.authService.getSessionInfo();  
+    if(sessionInfo ){
+      this.id = Number(sessionInfo.id); 
+    }
+    this.loadData();
+    this.itemForm.get('categoryId')?.valueChanges.subscribe(categoryId => {
+      if (categoryId) {
+        this.loadSubCategories(parseInt(categoryId));
+      } else {
+        this.subCategories = [];
+      }
+      console.log(this.subCategories)
+    });
+  }
+
+  loadData() {
+    this.categoryService.getCategories().subscribe(
+      data => {
+        this.categories = data;
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    );
+    
+  }
+  loadSubCategories(categoryId: number){
+    console.log("CategoryId : "); 
+    console.log(categoryId); 
+    this.categoryService.getSubCategoriesByCatId(categoryId).subscribe(
+      data => {
+        this.subCategories = data;
+        console.log(this.subCategories)
+      },
+      error => {
+        console.log("Error: ", error);
+      }
+    );
+  }
+  submitItem() {
+    if (this.itemForm.valid) {
+      this.item.description = this.itemForm.get('description')?.value ?? ''; 
+      this.item.title = this.itemForm.get('title')?.value ?? '';
+      this.item.subcategoryId = Number(this.itemForm.get('subCategoryId')?.value);
+      this.item.userId = this.id; 
+
+      
+      if (this.selectedFile) {
+        this.itemService.postItem(this.item, this.selectedFile).subscribe({
+          next: (response) => console.log('Item successfully added', response),
+          error: (error) => console.error('Failed to add item', error)
+        });
+      } else {
+        console.error('No file selected');
+      }
+    
+    } else {
+      console.error('Form is not valid');
+    }
+  }
+
+  onFileSelected(event: Event): void {
+    const element = event.currentTarget as HTMLInputElement;
+    let fileList: FileList | null = element.files;
+    if (fileList) {
+      this.selectedFile = fileList[0];
+    }
+  }
 }
