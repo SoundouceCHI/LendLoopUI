@@ -10,7 +10,7 @@ import { Item } from '../models/item.model';
   imports: [CommonModule],
   template: `
     <article class="details">
-      <img class="listingPhoto" [src]="this.item?.itemImage">
+    <img class="listing-photo" [src]="getImageUrl(this.item?.itemId)" alt="Photo of {{this.item?.title}}">
       <div class ="itemDescAvail">
       <section>
         <h2>{{this.item?.title}}</h2>
@@ -44,9 +44,13 @@ export class DetailsComponent {
   }
   loadItem(){
     this.itemService.getItemById(this.itemId).subscribe(data => {
-      this.item = data
+      this.item = data; 
+      console.log("ITEM ID : ", this.item.itemId)
     }, error => {
       console.log("Error : ", error); 
     })
+  }
+  getImageUrl(itemId: any): string {
+    return this.itemService.getUrl(itemId); 
   }
 }

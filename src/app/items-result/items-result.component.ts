@@ -2,6 +2,7 @@ import { Component, Input } from '@angular/core';
 import { Item } from '../models/item.model';
 import { CommonModule } from '@angular/common';
 import { RouterModule } from '@angular/router';
+import { ItemService } from '../services/item.service';
 
 @Component({
   selector: 'app-items-result',
@@ -18,7 +19,9 @@ import { RouterModule } from '@angular/router';
 })
 export class ItemsResultComponent {
   @Input() item!: Item;
+  constructor(private itemService: ItemService){}
+
   getImageUrl(itemId: number): string {
-    return `https://localhost:7041/api/Items/${itemId}/image`; 
+    return this.itemService.getUrl(itemId); 
   }
 }

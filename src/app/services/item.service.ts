@@ -13,6 +13,9 @@ export class ItemService {
   getItems(): Observable<Item[]> {
     return this.http.get<Item[]>(this.apiUrl);
   }
+  getUrl(itemId: number): string {
+    return `https://localhost:7041/api/Items/${itemId}/image`; 
+  }
   getItemById(id :number): Observable<Item> {
     const url = `${this.apiUrl}/${id}`; 
     return this.http.get<Item>(url);
