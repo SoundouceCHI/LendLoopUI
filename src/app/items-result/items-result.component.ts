@@ -9,7 +9,7 @@ import { RouterModule } from '@angular/router';
   imports: [CommonModule, RouterModule],
   template: `
     <section class="listing">
-    <img class="listing-photo" >
+    <img class="listing-photo" [src]="getImageUrl(item.itemId)" alt="Photo of {{item.title}}">
     <h2 class="listing-heading">{{item.title}}</h2>
     <p class="listing-lenderName">{{item.userId}}</p>
     <a [routerLink]="['/details', item.itemId]">Details</a>
@@ -18,5 +18,7 @@ import { RouterModule } from '@angular/router';
 })
 export class ItemsResultComponent {
   @Input() item!: Item;
-
+  getImageUrl(itemId: number): string {
+    return `https://localhost:7041/api/Items/${itemId}/image`; 
+  }
 }
