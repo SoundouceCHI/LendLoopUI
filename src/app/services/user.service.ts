@@ -13,6 +13,10 @@ export class UserService {
 
   private apiUrl = "https://localhost:7041/api/UserApps"; 
   constructor(private http: HttpClient, private jwtHelper: JwtHelperService) { }
+  getUserIdByUserName(userName: string): Observable<number> {
+    const url = `${this.apiUrl}/getUserByUserName?userName=${userName}`;
+    return this.http.get<number>(url);
+  }
 
   submitLogin(userLogin: UserLogin): Observable<boolean> {
     const url = `${this.apiUrl}/login`;

@@ -34,6 +34,7 @@
   .form {
     flex: 2; 
     text-align: center;
+    visibility: hidden;
   }
   
   .popup {

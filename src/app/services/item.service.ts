@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders  } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams  } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { Item } from '../models/item.model';
 
@@ -36,5 +36,19 @@ export class ItemService {
     formData.append('image', file, file.name);
 
     return this.http.post<Item>(this.apiUrl, formData);
+  }
+  searchItems(title?: string, address?: string, userId?: number): Observable<Item[]> {
+    let params = new HttpParams();
+    if (title) {
+      params = params.append('title', title);
+    }
+    if (address) {
+      params = params.append('address', address);
+    }
+    if (userId !== undefined) {
+      params = params.append('userId', userId.toString());
+    }
+
+    return this.http.get<Item[]>(`${this.apiUrl}/searchItems`, { params });
   }
 }

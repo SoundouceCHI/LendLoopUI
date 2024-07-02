@@ -7,6 +7,7 @@ import { HttpClientModule,  provideHttpClient, withFetch} from '@angular/common/
 import { importProvidersFrom } from '@angular/core';
 import { provideJwtOptions } from './app/config/jwt.config';
 import { JwtHelperService } from '@auth0/angular-jwt';
+import { provideAnimationsAsync } from '@angular/platform-browser/animations/async';
 
 bootstrapApplication(AppComponent, {
   providers: [
@@ -14,7 +15,7 @@ bootstrapApplication(AppComponent, {
     importProvidersFrom(HttpClientModule) , 
     provideHttpClient(withFetch()),
     provideJwtOptions(),
-    JwtHelperService,
+    JwtHelperService, provideAnimationsAsync(),
   ]
 }
 )

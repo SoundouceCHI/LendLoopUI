@@ -4,6 +4,8 @@ import { DetailsComponent } from "./details/details.component";
 import { LoginComponent } from "./login/login.component";
 import { UserItemComponent } from "./user-item/user-item.component";
 import { AddItemComponent } from "./add-item/add-item.component";
+import { BookingComponent } from "./booking/booking.component";
+import { AuthGuard } from './services/authGard';
 
 const routeConfig : Routes= [
     {
@@ -30,6 +32,12 @@ const routeConfig : Routes= [
         path: "addItem/:id",
         component: AddItemComponent, 
         title: "New Item" 
+    }, 
+    {
+        path:"booking/:id", 
+        component: BookingComponent, 
+        title: "booking",
+        canActivate: [AuthGuard] 
     }
 ]; 
 
